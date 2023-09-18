@@ -53,6 +53,7 @@ function extractBlooming(value) {
 
     // Define mappings for the special cases
     // remember that these are Northern Hemisphere seasons
+
     const bloomingMappings = {
         'mainly in winter and spring': 'December-May',
         'mainly in spring and summer': 'March-August',
@@ -68,14 +69,29 @@ function extractBlooming(value) {
         'sometimes flowers': 'rarely',
     };
 
-    const monthsRegex = /(January|February|March|April|May|June|July|August|September|October|November|December)/ig;
-    const matches = value.match(monthsRegex);
+    const bloomingRegex = /(?:flowering|fruiting)(?:\speriod)?\s((?:[A-Za-z]+(?:-[A-Za-z]+)?\s*)+)/ig;
+    const matches = [...value.matchAll(bloomingRegex)];
 
-    if (matches && matches.length >= 2) {
-        const floweringPeriod = matches.slice(0, 2).join('-');
-        const fruitingPeriod = matches.slice(2).join('-');
-        result.flowering_period = floweringPeriod || null;
-        result.fruiting_period = fruitingPeriod || null;
+    const floweringPeriods = [];
+    const fruitingPeriods = [];
+
+    for (const match of matches) {
+        const periods = match[1].trim();
+        const months = periods.match(/(January|February|March|April|May|June|July|August|September|October|November|December)/ig);
+        if (months) {
+            if (/flowering/ig.test(match[0])) {
+                floweringPeriods.push(months.join('-'));
+            } else if (/fruiting/ig.test(match[0])) {
+                fruitingPeriods.push(months.join('-'));
+            }
+        }
+    }
+
+    if (floweringPeriods.length > 0) {
+        result.flowering_period = floweringPeriods.join(', ');
+    }
+    if (fruitingPeriods.length > 0) {
+        result.fruiting_period = fruitingPeriods.join(', ');
     }
 
     return result;
@@ -87,42 +103,43 @@ function extractColors(value) {
 
     if (!value) return result;
 
-    // Use regular expression to find color type and names
-    const colorPattern = /(\w+)\s+(.+?)(?=(?:,\s+\w+\s+|$))/g;
+    const colorPattern = /(\b(?:leaf|flower|fruit|bract)\s+color\b)([^,]+)?/gi;
     let match;
 
-    const excludedWords = ['',',', 'to','a','in','the','mixed', 'concentrated','tender','inside', 'gradually','needle', 'shape','surface','bi','coverd','tomentum','colorLight','fresh','upper','part','colorpurple','mixture','of','rim','bio', 'from', 'with', 'small','emerald', 'pure','pale','tips','turning','crimson', 'scarlet','stripes','turnning', 'spots', 'dark','apex','leaf','dots', 'light', 'or','ï¼\x8Cwill\'','ï¼\x8Cand','ï¼\x8Cflower\'','margin', 'will', 'turn', 'under', 'sufficient', 'adequate', 'sunlight','dotted','striped','speckled','spotted','rose','mainly','with','viola','and','deep','yellowï¼\x8Cfruit', ];
+    const excludedWords = [
+        '', ',','from','color','colour', 'to', 'a', 'in', 'the', 'mixed', 'concentrated', 'tender', 'inside', 'gradually', 'needle', 'shape', 'surface',
+        'bi', 'coverd', 'tomentum', 'colorLight', 'fresh', 'upper', 'part', 'colorpurple', 'mixture', 'of', 'rim', 'bio',
+        'from', 'with', 'small', 'emerald', 'pure', 'pale', 'tips', 'turning', 'crimson', 'scarlet', 'stripes', 'turnning',
+        'spots', 'dark', 'apex', 'leaf', 'dots', 'light', 'or', 'ï¼\x8Cwill\'', 'ï¼\x8Cand', 'ï¼\x8Cflower\'', 'margin',
+        'will', 'turn', 'under', 'sufficient', 'adequate', 'sunlight', 'dotted', 'striped', 'speckled', 'spotted', 'rose',
+        'mainly', 'with', 'viola', 'and', 'deep', 'yellowï¼\x8Cfruit',
+    ];
 
     while ((match = colorPattern.exec(value))) {
         const colorType = match[1].toLowerCase();
-        const colorNames = match[2].split(/\s+/).filter(name => {
-            const lowerName = name.toLowerCase();
-            return lowerName && !excludedWords.includes(lowerName);
-        });
+        const colorDescription = match[2] ? match[2].trim() : '';
 
-        // Check if the colorType is valid
-        if (['leaf', 'flower', 'fruit', 'bract'].includes(colorType)) {
-            if (!result[`${colorType}_color`]) {
-                result[`${colorType}_color`] = [];
+        if (['leaf color', 'flower color', 'fruit color', 'bract color'].includes(colorType)) {
+            if (!result[colorType.replace(/\s/g, '_')]) {
+                result[colorType.replace(/\s/g, '_')] = [];
             }
-            // Remove 'color' from color names and filter out excluded words and empty strings
-            const cleanedColorNames = colorNames
-                .map(name => name.replace(/color$/i, ''))
-                .filter(name => name && !excludedWords.includes(name.toLowerCase()));
-            // Add cleaned color names to the appropriate color type
-            result[`${colorType}_color`] = result[`${colorType}_color`].concat(cleanedColorNames);
+
+            // Split colorDescription by "to" and ","
+            const colorNames = colorDescription
+                .split(/\s*,\s*|\s+to\s+/)
+                .map(name => name.trim())
+                .filter(name => name.length > 0 && !excludedWords.includes(name.toLowerCase()));
+
+            if (colorNames.length > 0) {
+                result[colorType.replace(/\s/g, '_')].push(...colorNames);
+            }
         }
     }
 
-    // Remove trailing commas from color names
+    // Convert empty arrays to null
     for (const key in result) {
-        if (Array.isArray(result[key])) {
-            result[key] = result[key].map(name => name.replace(/,$/, ''));
-            if (result[key].length === 0) {
-                result[key] = null; // Remove empty arrays
-            } else if (result[key].length === 1) {
-                result[key] = result[key][0]; // Convert single-item arrays to single values
-            }
+        if (Array.isArray(result[key]) && result[key].length === 0) {
+            result[key] = null;
         }
     }
 
@@ -132,7 +149,7 @@ function extractColors(value) {
 fs.createReadStream('PlantDB.csv')
     .pipe(csv())
     .on('data', (data) => {
-        // 'category - family, genus'
+
         const categoryParts = data.category.split(', ');
         data.family = categoryParts[0];
         data.genus = categoryParts[1];
@@ -154,11 +171,6 @@ fs.createReadStream('PlantDB.csv')
         data.flower_color = cleanStr(colorInfo.flower_color);
         data.fruit_color = cleanStr(colorInfo.fruit_color);
         data.bract_color = cleanStr(colorInfo.bract_color);
-
-        console.log('leaf: ',data.leaf_color);
-        console.log('flower: ',data.flower_color);
-        console.log('fruit: ',data.fruit_color);
-        console.log('bract: ',data.bract_color);
 
         results.push({
             scientific_name: cleanStr(data.scientific_name),
@@ -196,7 +208,6 @@ fs.createReadStream('PlantDB.csv')
             max_soil_ec: cleanStr(data.max_soil_ec),
             min_soil_ec: cleanStr(data.min_soil_ec),
         });
-
     })
     .on('end', () => {
         // Create a JSON file with the updated data
