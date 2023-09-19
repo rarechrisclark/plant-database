@@ -1,0 +1,101 @@
+{
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Dipsacales",
+    "family": "Caprifoliaceae", // TO DO: from category
+    "genus": "Abelia", // TO DO: from category
+    "species": "chinensis" // TO DO: from taxonomy data
+    "scientific_name": "abelia chinensis",
+    "display_name": "Abelia chinensis",
+    "alias": "chinese abelia",
+    "common_name": "Abelia" // TO DO: from taxonomy / horticulture data
+  },
+  "general_info": {
+    "origin": "China",
+    "production": "China",
+    "image": "http://pkb.resource.huahuacaocao.com/YWJlbGlhIGNoaW5lbnNpcy5qcGc=?imageView2/1/w/%d/h/%d",
+    "plant_category": "Shrub", // TO DO : from taxonomy data
+    "blooming": {
+      "flowering_period": [
+        month_start,
+        month_end
+      ],
+      // String (e.g. "Jan", "Feb")
+      "fruiting_period": [
+        month_start,
+        month_end
+      ],
+      // String (e.g. "Jan", "Feb")
+      "floral_language": [
+        "Elegant",
+        "noble",
+        "pure",
+        "beautiful"
+      ]
+    }
+  },
+  "color": {
+    "leaf_color": [
+      "color1",
+      "color2",
+      "color3"
+    ], // TO DO: from color data (CSV)
+    "flower_color": [
+      "color1",
+      "color2",
+      "color3"
+    ], // TO DO: from color data (CSV)
+    "fruit_color": [
+      "color1",
+      "color2",
+      "color3"
+    ], // TO DO: from color data (CSV)
+    "bract_color": [
+      "color1",
+      "color2",
+      "color3"
+    ], // TO DO: from color data (CSV)
+  },
+  "size": {
+    "values": [
+      diameter,
+      height
+    ], // numeric values
+    "units_metric": [
+      diameter,
+      height
+    ], // strings (e.g. "cm", "m")
+    "units_imperial": [
+      diameter,
+      height
+    ] // strings (e.g. "inch", "ft")
+  },
+  "general_care": {
+    "soil": "Peat or soil with specific nutrients",
+    "sunlight": "Like sunshine, slightly resistant to half shade",
+    "watering": "Water thoroughly when soil is dry, avoid saturated water",
+    "fertilization": "Dilute fertilizers following instructions, apply 1-2 times monthly",
+    "pruning": "Remove dead, rotten, diseased leaves and the parts that may affect the good appearance"
+  },
+  "environment": {
+    "light": {
+      "mmol": [max_light_mmol, min_light_mmol], // numeric values
+      "lux": [max_light_lux, min_light_lux] // numeric values
+    },
+    "temperature": {
+      "celsius": [max_temp, min_temp], // numeric values
+      "fahrenheit": [max_temp, min_temp] // numeric values
+    },
+    "humidity": {
+      "env_humid": [max_env_humid, min_env_humid] // numeric values
+    },
+    "soil": {
+      "moisture": {
+        "soil_moist": [max_soil_moist, min_soil_moist] // numeric values
+    },
+      "ec": {
+        "soil_ec": [max_soil_ec, min_soil_ec] // numeric values
+      }
+    }

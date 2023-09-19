@@ -155,11 +155,6 @@ fs.createReadStream('PlantDB.csv')
         data.fruit_color = cleanStr(colorInfo.fruit_color);
         data.bract_color = cleanStr(colorInfo.bract_color);
 
-        console.log('leaf: ',data.leaf_color);
-        console.log('flower: ',data.flower_color);
-        console.log('fruit: ',data.fruit_color);
-        console.log('bract: ',data.bract_color);
-
         results.push({
             scientific_name: cleanStr(data.scientific_name),
             display_name: cleanStr(data.display_name),
