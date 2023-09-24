@@ -1,2 +1,9 @@
+# ignore all files in node_modules
 node_modules
+
+# ignore media files for now
 plant-images
+
+# ignore json files - except package.json
+*.json
+!package.json

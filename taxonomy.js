@@ -1,26 +1,8 @@
 const fs = require('fs');
 const csv = require('csv-parser');
-const iconv = require('iconv-lite');
+const cleanStr = require('./utils/cleanString');
 
 const results = [];
-
-//// Clean up the 'size' column strings
-function cleanStr(value) {
-    if (typeof value !== 'string' || !value) return value; // Check if value is a string or is empty
-
-    // Remove any non-printable characters
-    value = value.replace(/[\x00-\x1F\x7F]/gu, '');
-    // Normalize Unicode characters to their closest ASCII equivalents using iconv-lite
-    value = iconv.decode(value, 'utf8'); // Convert to UTF-8
-    value = iconv.encode(value, 'ascii'); // Convert to ASCII
-    // Remove remaining non-ASCII characters
-    value = value.toString('ascii');
-    // Replace any consecutive spaces with a single space
-    value = value.replace(/\s+/g, ' ');
-    // Trim leading and trailing spaces
-    value = value.trim();
-    return value;
-}
 
 fs.createReadStream('PlantDB.csv')
     .pipe(csv())
@@ -45,12 +27,21 @@ fs.createReadStream('PlantDB.csv')
                 // order: cleanStr(data.order),
                 family: cleanStr(data.family),
                 genus: cleanStr(data.genus),
-                species: (cleanStr(data.species)),
-            },
-            name: {
-                // common: cleanStr(data.common_name),
-                scientific: cleanStr(data.scientific_name),
-            },
+                species: cleanStr(data.species),
+                // variety: // TO DO
+                name: {
+                    scientific: cleanStr(data.scientific_name),
+                    display: cleanStr(data.display_name),
+                    common: cleanStr(data.display_name),
+                    alias: [
+                    // TO DO
+                    ]
+                },
+                image: cleanStr(data.image),
+                origin: cleanStr(data.origin),
+                production: cleanStr(data.production),
+                // type: // TO DO
+            }
         });
     })
     .on('end', () => {

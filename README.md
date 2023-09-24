@@ -19,3 +19,76 @@ max_soil_moist, min_soil_moist, max_soil_ec, min_soil_ec
 
 - The `convert.js` file contains the code to convert the .csv file to a .json file.
 - In order to convert the file into a JSON file, run: `node convert.js`
+
+### Final Plant Object (.json) structure
+
+```json
+{
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Lamiaceae",
+    "genus": "Salvia",
+    "species": "Salvia officinalis",
+    "variety": "Salvia officinalis 'Berggarten'",
+    "cultivar": "Salvia officinalis 'Berggarten'",
+    "name": {
+        "scientific": "Salvia officinalis 'Berggarten'",
+        "common": "Berggarten Sage",
+        "display": "Berggarten Sage",
+        "alias": ["Berggarten Sage", "Berggarten Sage", "Berggarten Sage"]
+    },
+    "image": "https://www.gardeningknowhow.com/wp-content/uploads/2019/03/berggarten-sage.jpg",
+    "origin": "country",
+    "production": "country",
+    "category": "Herb"
+  },
+  
+  "general": {
+    "blooming": {
+      "flowering_period": ["month_start", "month_end"],
+      "fruiting_period": ["month_start", "month_end"]
+    },
+    "colors": {
+      "leaf": {
+        "color": ["color","color","color"],
+        "hex": ["hex","hex","hex"]
+      },
+      "flower": {
+        "color": ["color","color","color"],
+        "hex": ["hex","hex","hex"]
+      },
+      "fruit": {
+        "color": ["color","color","color"],
+        "hex": ["hex","hex","hex"]
+      },
+      "bract": {
+        "color": ["color","color","color"],
+        "hex": ["hex","hex","hex"]
+      }
+    }
+  },
+  
+  "care": {
+    //
+  },
+  
+  "environment": {
+    "light": {
+      "mmol": ["min_light_mmol", "max_light_mmol"],
+        "lux": ["min_light_lux", "max_light_lux"]
+    },
+    "temperature": {
+      "celsius": ["min_temp", "max_temp"]
+    },
+    "humidity": ["min_env_humid", "max_env_humid"],
+    "soil": {
+      "moisture": ["min_soil_moist", "max_soil_moist"],
+      "ec": ["min_soil_ec", "max_soil_ec"]
+    }
+  }
+}
+
+```
