@@ -1,6 +1,22 @@
 ### Main Data Sources
 
 #### [Royal Botanical Gardens Kew](https://powo.science.kew.org/)
+- [International Plant Names Index](https://www.ipni.org/)
+- [World Checklist of Selected Plant Families](http://wcsp.science.kew.org/)
+- [Plants of the World Online](https://powo.science.kew.org/)
+
+#### [World Flora Online](https://www.worldfloraonline.org/)
+- [API](https://list.worldfloraonline.org/)
+- [API Data](https://zenodo.org/record/7467360)
+- [API instructions](https://github.com/rogerhyam/wfo-plant-list)
+- [Flora Zambesiaca - Plant Description Provider](https://www.worldfloraonline.org/organisation)
+- [World Flora Online](https://www.worldfloraonline.org/resource/229378/output?query=&limit=10&start=0&sort=&facet=annotation.record_type_s%3aDescription&facet=base.class_s%3aorg.emonocot.model.Annotation&facet=annotation.job_id_l%3a1068)
+- [Download Data](https://www.worldfloraonline.org/downloadData)
+
+#### [Australian National Herbarium](https://www.anbg.gov.au/cpbr/herbarium/)
+- [Australian Plant Name Index](https://www.anbg.gov.au/cgi-bin/apni)
+- [Australian Plant Census](https://biodiversity.org.au/nsl/services/apc-format/display/119673)
+- [Ibis Species Links](https://www.anbg.gov.au/ibis/speciesLinks.html)
 
 ### TRY Database (Taxonomy, Reference, and Images)
 - [Datasets](https://www.try-db.org/de/Datasets.php)
